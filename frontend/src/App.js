@@ -13,9 +13,8 @@ import ProtectedPage from "./views/ProtectedPage";
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen overflow-hidden">
+      <div className="">
         <AuthProvider>
-          <Navbar />
           <Switch>
             <PrivateRoute component={ProtectedPage} path="/protected" exact />
             <Route component={Login} path="/login" />
@@ -23,7 +22,6 @@ function App() {
             <Route component={Home} path="/" />
           </Switch>
         </AuthProvider>
-        <Footer />
       </div>
     </Router>
   );
