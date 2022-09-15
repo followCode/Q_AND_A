@@ -43,6 +43,36 @@ export const signInUser =
       });
   };
 
+  export const registerUser =
+  (credentials, errorCallback = {}, successCallback = {}) =>
+  dispatch => {
+    console.log(credentials)
+    return fetch(config.SERVER_BASE_URL + 'register/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+      .catch(err => {
+        console.log(err);
+        throw new Error(UNABLE_TO_CONNECT);
+      })
+      .then(response => {
+        response.json().then((data) => {
+          if(response.status === 400) {
+            errorCallback(Object.values(data).join("\n"));
+          } else {
+            successCallback();
+          }
+        })
+      })
+      .catch(err => {
+        console.error(err);
+        errorCallback(err.message);
+      });
+  };
+
 export const updateUser = data => {
   return {
     type: ActionTypes.UPDATE_TOKEN,

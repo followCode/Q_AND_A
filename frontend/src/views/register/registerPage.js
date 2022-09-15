@@ -1,13 +1,35 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { registerUser } from "../../redux/actionCreators/user";
 
-function Register() {
+const mapDispatchToProps = dispatch => ({
+  registerUser: (credentials, errorCallback, successCallback) => dispatch(registerUser(credentials, errorCallback, successCallback)),
+});
+
+const Register = ({registerUser}) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [formError, setFormError] = useState("");
 
+  const navigateToLogin = () => {
+    navigate("/login");
+  }
+
   const handleSubmit = () => {
-    setFormError("Passwords don't match")
+    if(password!==repeatPassword){
+      setFormError("Passwords do not match. Please ensure they match")
+    } else {
+      let credentials = {
+        username: username,
+        password: password,
+        password2: repeatPassword,
+      };
+
+      registerUser(credentials, setFormError, navigateToLogin);
+    }
   }
 
   return (
@@ -24,7 +46,7 @@ function Register() {
                 Username
               </div>
               <div className="">
-                <input type="text" className="form-control" onChange={setUsername}/>
+                <input type="text" className="form-control" onChange={e => setUsername(e.target.value)}/>
               </div>
             </div>
             <div className="d-flex flex-column pt-3 mx-auto">
@@ -32,7 +54,7 @@ function Register() {
                 Password
               </div>
               <div className="">
-                <input type="password" className="form-control" onChange={setPassword}/>
+                <input type="password" className="form-control" onChange={e => setPassword(e.target.value)}/>
               </div>
             </div>
             <div className="d-flex flex-column pt-3 mx-auto">
@@ -40,16 +62,16 @@ function Register() {
                 Repeat Password
               </div>
               <div className="">
-                <input type="password" className="form-control" onChange={setRepeatPassword}/>
+                <input type="password" className="form-control" onChange={e => setRepeatPassword(e.target.value)}/>
               </div>
             </div>
             <div className="d-flex flex-column mx-auto">
-              <div className="form-text text-danger">
+              <div className="d-grid col-6 mx-auto form-text text-danger">
                 {formError}
               </div>
             </div>
           </div>
-          <div className="d-flex flex-column justify-content-center p-3">
+          <div className="d-flex flex-column justify-content-center pt-3">
             <div className="d-grid gap-2 col-6 mx-auto">
               <button className="btn btn-primary" onClick={handleSubmit}>Register</button>
             </div>
@@ -63,4 +85,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default connect(null, mapDispatchToProps)(Register);
