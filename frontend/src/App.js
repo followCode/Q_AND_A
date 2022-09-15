@@ -1,27 +1,19 @@
 import React from "react";
 import "./index.css";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import PrivateRoute from "./utils/PrivateRoute";
-import { AuthProvider } from "./context/AuthContext";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./views/homePage";
-import Login from "./views/loginPage";
-import Register from "./views/registerPage";
-import ProtectedPage from "./views/ProtectedPage";
+import Login from "./views/login/loginPage";
+import Register from "./views/register/registerPage";
 
 function App() {
   return (
     <Router>
       <div className="">
-        <AuthProvider>
-          <Switch>
-            <PrivateRoute component={ProtectedPage} path="/protected" exact />
-            <Route component={Login} path="/login" />
-            <Route component={Register} path="/register" />
-            <Route component={Home} path="/" />
-          </Switch>
-        </AuthProvider>
+          <Routes>
+            <Route element={<Login/>} path="/login" />
+            <Route element={<Register/>} path="/register" />
+            <Route element={<Home/>} path="/" />
+          </Routes>
       </div>
     </Router>
   );
