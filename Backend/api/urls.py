@@ -11,5 +11,6 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('questions/', views.QuestionsView.as_view(), name='questions'),
     path('comments/', views.CommentsView.as_view(), name='comments'),
+    path('similar-questions/', views.SimilarQuestionsView.as_view(), name='similar-questions'),
     path('', views.get_routes)
 ]

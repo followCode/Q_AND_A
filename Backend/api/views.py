@@ -1,5 +1,6 @@
 from typing import Union
 
+from requests import post
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -57,6 +58,14 @@ class CommentsView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SimilarQuestionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        resp = post('http://localhost:8001/similar-questions', json=request.data)
+        return Response(resp.json(), status=resp.status_code)
+
+
 @api_view(['GET'])
 def get_routes(request):
     routes = [
@@ -64,6 +73,7 @@ def get_routes(request):
         '/api/register/',
         '/api/token/refresh/',
         '/api/questions/',
-        '/api/comments/'
+        '/api/comments/',
+        '/api/similar-questions/'
     ]
     return Response(routes)
