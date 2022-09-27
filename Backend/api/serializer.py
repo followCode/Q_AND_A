@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from django.utils.functional import empty
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from api.models import Question
+from api.models import Question, Comment
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -20,10 +19,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class QuestionsSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
+    user_name = serializers.CharField(source='user.username')
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'pub_date', 'user')
+        fields = ('id', 'text', 'pub_date', 'user_name')
 
 
 class AddQuestionsSerializer(serializers.ModelSerializer):
@@ -31,6 +31,22 @@ class AddQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('text', 'pub_date')
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    user_name = serializers.CharField(source='user.username')
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'text', 'user_name')
+
+
+class AddCommentsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ('question', 'text')
 
 
 class RegisterSerializer(serializers.ModelSerializer):

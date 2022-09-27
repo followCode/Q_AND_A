@@ -10,5 +10,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('questions/', views.QuestionsView.as_view(), name='questions'),
+    path('comments/', views.CommentsView.as_view(), name='comments'),
     path('', views.get_routes)
 ]
