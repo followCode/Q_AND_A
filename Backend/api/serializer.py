@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.utils.functional import empty
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from api.models import Question
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -14,6 +16,22 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         # ...
         return token
+
+
+class QuestionsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Question
+        fields = ('id', 'text', 'pub_date', 'user')
+
+
+class AddQuestionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = ('text', 'pub_date')
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -40,4 +58,3 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
-
