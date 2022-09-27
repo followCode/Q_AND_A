@@ -8,6 +8,9 @@ A question-answer platform where users can ask questions and get answers from ot
 ### Requirements
 - Python 3.7.9
 - Docker & docker-compose
+- vocab file. Download 
+[here](https://drive.google.com/file/d/122qj6k7x_F56_znlhgeveZsXFnlnb2yv/view?usp=sharing). Then place it within 
+`Backend/model_api/model/`
 
 ### Backend
 - Move to `Backend` directory
