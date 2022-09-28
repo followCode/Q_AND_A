@@ -1,12 +1,30 @@
-import UserInfo from "../components/UserInfo";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { connect } from "react-redux";
 
-const Home = () => {
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+const Home = ({user}) => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.token && user.token.length !== 0) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  }, [user.token]);
+
   return (
     <section>
-      {"admin" && <UserInfo user={"admin"} />}
       <h1>You are on home page!</h1>
     </section>
   );
 };
 
-export default Home;
+export default connect(mapStateToProps, null)(Home);

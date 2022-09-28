@@ -1,25 +1,19 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-
 const Navbar = () => {
   return (
-    <nav>
-      <div>
-        <h1>App Name</h1>
-        <div>
-          {"Hello" ? (
-            <>
-              <Link to="/">Home</Link>
-              <Link to="/protected">Protected Page</Link>
-              <button >Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-            </>
-          )}
-        </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+      <a class="navbar-brand" href="#">Aquora</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              logout
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
   );
