@@ -47,11 +47,11 @@ def get_similar_questions():
 
     output_inds = []
 
-    for i in range(len(predictions)):
+    for i in range(0, len(predictions)):
         if predictions[i] == 1:
             output_inds.append(i)
 
-    output = [{"id": questions[ind][0], "text": questions[ind][1]} for ind in output_inds]
+    output = [{"id": questions[ind][0], "text": questions[ind][1]} for ind in output_inds][:10]
 
     return jsonify(output)
 
