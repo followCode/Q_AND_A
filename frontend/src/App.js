@@ -6,6 +6,7 @@ import Login from "./views/login/loginPage";
 import Register from "./views/register/registerPage";
 import Dashboard from "./views/dashboard/dashboard";
 import QuestionView from './views/question/question';
+import LogoutView from './views/logout/logout';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route element={<Register/>} path="/register" />
             <Route element={<Dashboard/>} path="/dashboard" />
             <Route element={<Home/>} path="/" />
+            <Route element={<LogoutView/>} path="/logout" />
             <Route element={<QuestionView/>} path="/question/:id"/>
           </Routes>
       </div>

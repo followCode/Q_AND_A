@@ -73,6 +73,15 @@ export const registerUser =
     });
 };
 
+export const logoutUser = (navigationCallback = {}) => dispatch => {
+  let data = {
+    token: '',
+    refreshToken: '',
+  }
+  dispatch(updateUser(data))
+  navigationCallback()
+}
+
 export const updateUser = data => {
   return {
     type: ActionTypes.UPDATE_TOKEN,
