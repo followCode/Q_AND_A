@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { getQuestions, similarQuestions } from "../../redux/actionCreators/questions";
+import { getQuestions, similarQuestions, addQuestion } from "../../redux/actionCreators/questions";
 import Navbar from "../../components/Navbar";
 
 const mapStateToProps = state => {
@@ -13,6 +13,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getQuestions: (token, errorCallback, successCallback) => dispatch(getQuestions(token, errorCallback, successCallback)),
   similarQuestions: (token, questionText, errorCallback, successCallback) => dispatch(similarQuestions(token, questionText, errorCallback, successCallback)),
+  addQuestion: (token, question, errorCallback, successCallback) => dispatch(addQuestion(token, question, errorCallback, successCallback)),
 });
 
 const QuestionItem = ({question}) => {
@@ -32,7 +33,7 @@ const QuestionItem = ({question}) => {
 const QuestionsList = ({questions}) => {
     return (
         <div className="my-2">
-            <h4 class="text-dark p-2">Questions from other users</h4>
+            <h4 className="text-dark p-2">Questions from other users</h4>
             {questions.map(q => (<QuestionItem question={q}/>))}
         </div>
     )
@@ -49,18 +50,15 @@ const SimilarQuestions = ({questions}) => {
     )
 }
 
-const AskQuestion = ({user, similarQuestionApi}) => {
+const AskQuestion = ({user, similarQuestionApi, addQuestionApi}) => {
 
     const [questionError, setQuestionError] = useState("");
     const [similarQuestions, setSimilarQuestions] = useState([]);
     const [disableAddQuestion, setDisableAddQuestion] = useState(false);
+    const [newQuestion, setNewQuestion] = useState("");
+    const navigate = useNavigate();
 
     const collectSimilarQuestions = (questionText) => {
-        /*
-        1. Check if it starts with "what", "why", "how", "who", "where", "when", "is", "are"
-        2. Needs to be at least 10 characters long
-        3. Make API call to get similar questions
-        */
         let questionStarters = ["what", "why", "how", "who", "where", "when", "is", "are"]
         let questionSeparated = questionText.toLowerCase().split(" ");
        
@@ -71,19 +69,49 @@ const AskQuestion = ({user, similarQuestionApi}) => {
             setQuestionError("Questions need to be at least 10 characters")
             setSimilarQuestions([]);
         } else {
-            setQuestionError("")
+            setQuestionError("");
+            setNewQuestion(questionText);
             similarQuestionApi(user.token, questionText, setQuestionError, setSimilarQuestions);
         }
         
     }
 
-    useEffect(() => {
-        if(similarQuestions.length>0) {
-            setDisableAddQuestion(true);
-        } else {
-            setDisableAddQuestion(false);
+    const navigateToQuestion = (questionId) => {
+        navigate('/question/'+questionId);
+    }
+
+    const handleAddQuestion = () => {
+        const helperFormatToTwoDigit = (number) => {
+            return number < 10 ? '0'+number : number;
         }
-      }, []);
+    
+        const getPublishDateTime = () => {
+            let currentDate = new Date();
+            let day = helperFormatToTwoDigit(currentDate.getDate());
+            let month = helperFormatToTwoDigit(currentDate.getMonth());
+            let year = currentDate.getFullYear();
+            let hours = helperFormatToTwoDigit(currentDate.getHours());
+            let minutes = helperFormatToTwoDigit(currentDate.getMinutes());
+    
+            // "2022-03-24T00:00"
+            return year+'-'+month+'-'+day+'T'+hours+':'+minutes;
+    
+        }
+
+        let question = {
+            text: newQuestion,
+            pub_date: getPublishDateTime(),
+        }
+        addQuestionApi(user.token, question, setQuestionError, navigateToQuestion)
+    }
+
+    // useEffect(() => {
+    //     if(similarQuestions.length>0) {
+    //         setDisableAddQuestion(true);
+    //     } else {
+    //         setDisableAddQuestion(false);
+    //     }
+    //   }, []);
 
     return (
         <div className="container d-flex flex-column my-2">
@@ -103,7 +131,7 @@ const AskQuestion = ({user, similarQuestionApi}) => {
                 )}
             </div>
             <div className="d-flex flex-row-reverse">
-              <button className={disableAddQuestion?"btn btn-primary disabled": "btn btn-primary"}>Add Question</button>
+              <button className={disableAddQuestion?"btn btn-primary disabled": "btn btn-primary"} onClick={handleAddQuestion}>Add Question</button>
             </div>
             <div className="mt-2 d-none">
                 <h5>Similar Questions</h5>
@@ -112,8 +140,7 @@ const AskQuestion = ({user, similarQuestionApi}) => {
     )
 }
 
-const Dashboard = ({user, getQuestions, similarQuestions}) => {
-  const navigate = useNavigate();
+const Dashboard = ({user, getQuestions, similarQuestions, addQuestion}) => {
   const [formError, setFormError] = useState("");
   const [questions, setQuestions] = useState([]);
 
@@ -127,7 +154,7 @@ const Dashboard = ({user, getQuestions, similarQuestions}) => {
         <div className="container d-flex justify-content-center">
             <div className="container-fluid d-flex flex-column">
                 <div className="">
-                    <AskQuestion user={user} similarQuestionApi={similarQuestions}/>
+                    <AskQuestion user={user} similarQuestionApi={similarQuestions} addQuestionApi={addQuestion}/>
                 </div>
                 <div className="">
                     <QuestionsList questions={questions.slice(0, 10)} />
