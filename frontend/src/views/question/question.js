@@ -28,14 +28,24 @@ const QuestionSection = ({question}) => {
     )
 }
 
-// const QuestionsList = ({questions}) => {
-//     return (
-//         <div className="my-2">
-//             <h4 className="text-dark p-2">Questions from other users</h4>
-//             {questions.map(q => (<QuestionItem question={q}/>))}
-//         </div>
-//     )
-// }
+const CommentItem = ({comment}) => {
+    return (
+        <div className="card m-2">
+            <div className="card-body">
+                <h6 className="card-subtitle mb-2 text-muted">{comment.user_name}</h6>
+                <h5 className="card-title text-dark">{comment.text}</h5>
+            </div>
+        </div>
+    )
+}
+
+const CommentsList = ({comments}) => {
+    return (
+        <div className="my-2">
+            {comments.map(c => (<CommentItem comment={c}/>))}
+        </div>
+    )
+}
 
 
 const AddComment = ({user, question_id, addCommentApi}) => {
@@ -109,9 +119,7 @@ const QuestionView = ({user, getQuestion, getComments, addComment}) => {
                     <AddComment user={user} question_id={id} addCommentApi={addComment}/>
                 </div>
                 <div className="">
-                    <ul>
-                        { comments.map(comment => (<li>User:{comment.user_name}; {comment.text}</li>)) }
-                    </ul>
+                    <CommentsList comments={comments}/>
                 </div>
             </div>
         </div>
