@@ -3,6 +3,7 @@ import pickle
 
 from flask import Flask, jsonify, request
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 from db_utils import get_db_connection, get_all_questions
 
@@ -42,13 +43,16 @@ def get_similar_questions():
         }), 400
 
     context_question = json_data['text']
-    questions_text = vectorizer.transform([context_question + ' ' + q[1] for q in questions])
-    predictions = model.predict(questions_text)
+
+    context_question = vectorizer.transform([context_question])
+    stored_questions = [vectorizer.transform([q[1]]) for q in questions]
+
+    predictions = [cosine_similarity(context_question, question) for question in stored_questions]
 
     output_inds = []
 
     for i in range(0, len(predictions)):
-        if predictions[i] == 1:
+        if abs(predictions[i]) >= 0.5:
             output_inds.append(i)
 
     output = [{"id": questions[ind][0], "text": questions[ind][1]} for ind in output_inds][:10]
