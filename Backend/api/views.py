@@ -28,7 +28,11 @@ class QuestionsView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        questions = Question.objects.all()
+        question_id = request.query_params.get('id', None)
+        if not question_id:
+            questions = Question.objects.all()
+        else:
+            questions = Question.objects.filter(pk=question_id)
         serializer = QuestionsSerializer(questions, many=True)
         return Response(serializer.data)
 
