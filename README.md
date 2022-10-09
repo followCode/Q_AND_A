@@ -1,7 +1,39 @@
 # Q & A Site With ML
 
-An attempt to clone Quora and the ML capabilities that it provides.
+An attempt to clone Quora's similar questions ML capability.
 A question-answer platform where users can ask questions and get answers from other users.
+
+## Screenshots
+
+Similar Questions shown when adding a new question. (This section comes under dashboard and requires a user login)
+
+
+![Similar Questions](screenshots/question-similarity.png)
+
+
+Login as a user
+
+![Login Page](screenshots/login.png)
+
+
+Register an account
+
+![Registration Page](screenshots/register.png)
+
+
+Dashboard that is visible after a successful login
+
+![Dashboard](screenshots/dashboard.png)
+
+
+Question format expectations when asking a question
+
+![Question Format](screenshots/ask-question-w-error.png)
+
+
+Viewing an already asked question
+
+![Already asked question](screenshots/question-view.png)
 
 ## Developer Setup
 
@@ -28,6 +60,9 @@ Setup the basic backend db
 - Install project dependencies
 
   `pip install -r requirements.txt`
+
+- Create a `.env` file at the root of the Backend folder using the contents of `.env.sample` file.
+
 
 ### Backend - ML API (Flask)
 - Move to `Backend\model_api\` directory
